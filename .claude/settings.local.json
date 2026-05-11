@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(py install 3.12)",
+      "PowerShell(py -3.12 -m pip install -r requirements.txt)",
+      "PowerShell(py -3.12 -m pip show duckdb 2>&1)",
+      "PowerShell(.\\\\run.ps1 load)",
+      "PowerShell(py -m pip install duckdb --upgrade)"
+    ]
+  }
+}
