@@ -1,8 +1,10 @@
 # Rétroaction automatisée -- S01 (Diagnostic fondamental -- NexaMart kickoff)
 
-_Générée le 2026-05-14T22:23:03+00:00 -- Run `20260514T221333Z-7d34bf6a`_
+_Générée le 2026-05-15T12:35:31+00:00 -- Run `20260515T122624Z-00a5a04f`_
 
 Ce document est produit par un pipeline reproductible (vérification SQL déterministe + analyse LLM du brief et de la déclaration IA). Une revue humaine précède toujours sa publication. **À ce stade expérimental, aucune note ni étiquette de niveau n'est diffusée : l'objectif est purement formatif.**
+
+> ⚠️ **Avertissement instructeur (à retirer avant publication) :** cette analyse a été générée avec `--skip-pull`. Le contenu correspond au commit local et **n'est peut-être pas la dernière version poussée par l'étudiant·e**.
 
 ---
 
@@ -38,38 +40,35 @@ ORDER BY p.category, s.region, d.year, d.quarter;
   - `revenue` → `total_revenue`
 - Présence de NULLs dans des colonnes de groupement : `category` =0, `region` =0, `quarter` =0. Pensez à documenter le traitement de ces cas.
 
-**Pistes :**
-> Votre `db/nexamart.duckdb` est absente ou vide ; la requête a été exécutée contre une **base de référence cohorte** (seed instructeur). Les chiffres retournés ne correspondent donc pas à vos propres données : reconstruisez votre base avec `python src/run_pipeline.py` (ou `.\run.ps1 load`) pour valider vos calculs sur votre seed personnel.
-
 ## 2. Rétroaction pédagogique sur le brief
 
-> Bon diagnostic conceptuel et un modèle en étoile clairement énoncé; la brief contient une requête d'agrégation et des vérifications d'intégrité décrites. Il manque toutefois des éléments opérationnels : DDL/SCD explicites, checks automatisés et traces de processus (commits/IA) pour rendre le livrable reproductible et industriel.
+> Le brief présente un schéma en étoile approprié et une requête de preuve, et il recommande de formaliser l'entrepôt. Il manque toutefois la traçabilité (commits, note IA) et des artefacts de reproductibilité et quelques précisions techniques (SCD, traitements de cas limites).
 
 ### Observations par dimension
 
 **Model quality**
-- Observation : La brief indique un modèle en étoile avec fait `fact_sales` au grain d'une ligne de commande et cinq dimensions (`dim_product`, `dim_store`, `dim_date`, `dim_customer`, `dim_channel`).
-- Piste d'amélioration : Préciser le traitement des changements historiques (SCD Type 2 vs Type 1) et documenter explicitement les clés substituts et le DDL attendu pour `fact_sales` et chaque `dim_*`.
+- Observation : Le brief décrit un modèle en étoile avec grain 'ligne de commande' et cinq dimensions (dim_product, dim_store, dim_date, dim_customer, dim_channel).
+- Piste d'amélioration : Documenter explicitement le choix du grain (pourquoi 'ligne de commande' vs 'commande') et adresser le traitement des changements historiques (SCD) et des attributs non-additifs comme unit_price.
 
 **Validation quality**
-- Observation : Le brief fournit une requête SQL d'agrégation (GROUP BY category, region, year, quarter) et décrit des contrôles d'intégrité (absence de NULLs, doublons, intégrité référentielle).
-- Piste d'amélioration : Fournir des requêtes `make check` concrètes (rowcounts attendus, checks NULL, détection des doublons sur le grain) et traiter explicitement les cas non-additifs (ex. unit_price).
+- Observation : Le document fournit une requête SQL d'agrégation sur raw_* et liste des contrôles attendus (absence de NULLs, doublons, intégrité référentielle).
+- Piste d'amélioration : Fournir des requêtes check reproductibles (make check) qui traitent les NULLs, valident le grain et vérifient les cas-limites (unit_price non-additif, sommes pondérées).
 
 **Executive justification**
-- Observation : La section 'Réponse exécutive' explique que les données sont dans des systèmes OLTP et recommande de centraliser et transformer en entrepôt dimensionnel pour répondre à la question CEO.
-- Piste d'amélioration : Formuler une recommandation décisionnelle plus directe (ex. : 'Approuvez la construction du schéma en étoile v1 et un sprint de 2 semaines pour les transformations prioritaires') et ajouter une estimation d'impact ou un KPI cible.
+- Observation : La réponse exécutive affirme que les données existent mais nécessitent un entrepôt dimensionnel et recommande de formaliser le modèle pour répondre à la question du CEO.
+- Piste d'amélioration : Raccourcir en 150–300 mots, formuler une décision claire pour le board (ex. : approuver la construction du schéma en étoile v1) et indiquer l'impact attendu ou métrique de succès.
 
 **Process trace**
 - Observation : Aucun historique de commits, note IA ou journal de décision n'est fourni dans le brief.
-- Piste d'amélioration : Ajouter un petit journal de décisions et l'historique git (≥3 commits significatifs) et déclarer l'usage d'outils IA/le rôle humain dans les vérifications.
+- Piste d'amélioration : Ajouter un petit log de processus : au moins 3 commits significatifs et une note IA indiquant outils utilisés et validations humaines.
 
 **Reproducibility**
-- Observation : Le brief mentionne que les tables `raw_*` existent dans DuckDB mais ne fournit ni README, ni scripts pour cloner et reproduire les transformations.
-- Piste d'amélioration : Fournir un README minimal et un script `make run`/`make check` qui permet à un coéquipier de reproduire les checks sur un clone propre.
+- Observation : Le brief mentionne que les raw_* existent dans DuckDB mais ne fournit pas de scripts ni d'instructions pour reproduire la transformation.
+- Piste d'amélioration : Inclure un README et un script 'check' (DuckDB) permettant à un collègue de cloner et d'exécuter les vérifications en moins de 5 minutes sans chemins codés en dur.
 
 ## 3. Déclaration d'utilisation de l'IA
 
-> La déclaration couvre les outils (modèle et contexte), les étapes d'utilisation, la validation humaine et mentionne des limites. Bien que claire et suffisante pour l'évaluation, veillez à supprimer l'exemple générique (Copilot) si vous n'en avez pas réellement fait usage pour ce livrable.
+> La déclaration est complète : elle nomme les outils avec modèle, précise les étapes d'utilisation et décrit des validations humaines concrètes. Les limites et risques sont évoqués ; continuez à garder des validations explicites (ex. versions d'extension ou captures de commandes) si vous en ajoutez d'autres.
 
 **Sujets bien couverts dans votre déclaration :**
 
@@ -86,11 +85,11 @@ ORDER BY p.category, s.region, d.year, d.quarter;
 
 ## 5. Traçabilité
 
-- **Run ID :** `20260514T221333Z-7d34bf6a`
+- **Run ID :** `20260515T122624Z-00a5a04f`
 - **Devoir :** `S01`
 - **Étudiant·e :** `Vendetti1000`
-- **Commit analysé :** `a053d73`
-- **Audit (côté instructeur) :** `tools/instructor/feedback_pipeline/audit/20260514T221333Z-7d34bf6a/Vendetti1000/`
+- **Commit analysé :** `0bcbec6`
+- **Audit (côté instructeur) :** `tools/instructor/feedback_pipeline/audit/20260515T122624Z-00a5a04f/Vendetti1000/`
 - **Prompts (SHA-256) :**
   - `sql_extractor_system` : `90ee9e277de7a27f...`
   - `rubric_grader_system` : `505f32d1d8319d66...`
