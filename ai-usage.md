@@ -25,6 +25,23 @@
 
 <!-- Ajoutez vos entrées ci-dessous -->
 
+### 2026-05-14 — Séance S02
+- **Modèle :** Claude Code (claude-sonnet-4-6) via extension VS Code
+- **Prompt :**
+  1. « On commence avec le schéma — est-ce que les tables ont des colonnes qui s'appellent ID ? »
+  2. « D'après la théorie, c'est mieux de garder la clé naturelle ou bien créer une clé homemade ? »
+  3. « On va garder les clés naturelles jusqu'à preuve du contraire — le système ne changera pas pour la durée du cours. »
+  4. « Le grain est déjà déterminé par fact_sales non ? C'est une ligne, une transaction ? »
+  5. « La question du CEO S01, c'était quoi ? J'ai l'impression qu'il manque des dimensions. »
+  6. « Je crois que ce serait une bonne idée de mettre une dimension catégorie et une dimension région/géographique — on a ça déjà ou on doit les ajouter ? »
+  7. « On va éviter le snowflake et on prévoit faire des tables dénormalisées dans chaque dim. »
+  8. « Avec cette requête, on sera capable de répondre à la question du CEO S01 plus tard ? »
+  9. « Le CEO est encore en mode exploratoire — restons en mode diagnostique. »
+  10. « Tu peux me donner la question CEO du S03 juste pour voir comment s'y préparer ? »
+- **Résultat :** Claude a confirmé la structure des clés dans les tables raw_*, expliqué le choix entre clés naturelles et clés de substitution, précisé que le grain est une ligne de commande et non une transaction, identifié les 6 dimensions du schéma (incluant dim_geography), généré le diagramme Mermaid en étoile, produit la requête SQL de preuve, et rédigé les sections du brief S02 (grain, réponse exécutive, décisions de modélisation, preuve, validation, risques, recommandations).
+- **Validation :** L'étudiant a guidé activement les décisions : proposition du style Kimball, choix d'éviter le snowflake, questionnement sur ce qui est prouvé vs donné comme contexte, anticipation de S03 pour évaluer l'impact sur S02. Les sections du brief ont été approuvées et ajustées avant insertion. Le diagramme Mermaid a été validé visuellement via la preview VS Code.
+- **Justification :** Claude a servi d'accélérateur et de validateur — l'étudiant maîtrise les principes (Kimball, grain, dénormalisation, dimensions conformes) et utilise l'IA pour confirmer ses intuitions, couvrir les angles morts et structurer la documentation. La terminologie technique avancée (SCD, fonctions de fenêtre, clés de substitution) est en cours d'apprentissage.
+
 ### 2026-05-11 — Séance S01
 - **Modèle :** Claude Code (claude-sonnet-4-6) via extension VS Code
 - **Prompt :**
